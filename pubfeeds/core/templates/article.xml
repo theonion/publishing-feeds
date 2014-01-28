@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nitf version="-//IPTC//DTD NITF 3.3//EN" xmlns:extra="urn:extra-functions">
+    <head>
+        <title>{{ article.title }}</title>
+        <docdata management-status="usable">
+            <doc-id id-string="{{ article.id }}" regsrc="AMZN" />
+            <date.issue norm="{{ article.publish_date|date:'c' }}" />
+            <date.release norm="{{ article.publish_date|date:'c' }}" />
+            <doc.copyright holder="The Onion" />
+        </docdata>
+    </head>
+    <body>
+        <body.head>
+            <hedline>
+                <hl1>{{ article.title|safe }}</hl1>
+                <hl2 class="subhead">{{ article.summary|safe }}</hl2>
+            </hedline>
+            <byline>{{ byline }}</byline>
+            <abstract>
+                <p>{{ article.summary|safe }}</p>
+            </abstract>
+        </body.head>
+        <body.content>
+            {{ article.content|safe }}
+        </body.content>
+        <body.end />
+    </body>
+</nitf>

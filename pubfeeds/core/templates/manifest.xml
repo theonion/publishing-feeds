@@ -3,11 +3,11 @@
 <channel>
     <title>{{ edition.feed.name }}</title>
     <link>{{ edition.feed.url }}</link>
-    <pubDate>{{ edition.published_date|date:"" }}Mon, 25 May 2007 13:00:11</pubDate>
+    <pubDate>{{ edition.published_date|date:"D, d M Y H:i:s" }}</pubDate>
     {% for section in sections %}
-        <item>
-            <link>/{{ edition.feed.slug}}/{{edition.id}}/{{ section.slug }}.xml</link>
-        </item>
+    <item>
+        <link>/{{ edition.feed.slug}}/{{edition.id}}/{{ section.slug }}.xml</link>
+    </item>
     {% endfor %}
 </channel>
 </rss>

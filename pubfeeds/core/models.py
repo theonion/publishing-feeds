@@ -15,14 +15,23 @@ class Feed(models.Model):
     slug = models.SlugField(unique=True)
     url = models.URLField()
 
+    def __unicode__(self):
+        return self.name
+
 
 class Section(models.Model):
+
+    class Meta:
+        order_with_respect_to = 'feed'
 
     name = models.CharField(max_length=255)
     slug = models.SlugField()
     url = models.URLField()
 
     feed = models.ForeignKey(Feed, related_name="sections")
+
+    def __unicode__(self):
+        return self.name
 
 
 class Edition(models.Model):
@@ -31,38 +40,53 @@ class Edition(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
     feed = models.ForeignKey(Feed, related_name="editions")
 
+    class Meta:
+        ordering = ["-published_date"]
+
     def poll(self):
         for section in self.feed.sections.all():
             data = feedparser.parse(section.url)
             for entry in data.entries:
                 if entry.link:
                     try:
-                        item = Item.objects.get(article_id=entry.link, section=section, edition=self)
-                    except Item.DoesNotExist:
-                        item = Item(article_id=entry.link, section=section, edition=self)
+                        article = Article.objects.get(identifier=entry.link, edition=self)
+                    except Article.DoesNotExist:
+                        article = Article(identifier=entry.link, section=section, edition=self)
+                    
+                    if article.section != section:
+                        continue # If this article has been already created in another section, skip that shit.
 
                     if hasattr(entry, 'author'):
-                        item.byline = entry.author
+                        article.byline = entry.author
 
                     if entry.summary:
-                        item.summary
+                        article.summary
 
-                    item.content = entry.content
-                    item.publish_date = datetime.fromtimestamp(mktime(entry.published_parsed)).replace(tzinfo=utc)
-                    item.save()
+                    article.content = entry.content
+                    article.publish_date = datetime.fromtimestamp(mktime(entry.published_parsed)).replace(tzinfo=utc)
+                    article.save()
 
     def get_absolute_url(self):
         return reverse("pubfeeds.core.views.edition", args=(self.feed.slug, self.id))
 
+    def __unicode__(self):
+        return "%s: %s" % (self.feed.name, self. publish_date)
 
-class Item(models.Model):
-    section = models.ForeignKey(Section, related_name="items")
-    edition = models.ForeignKey(Edition, related_name="items")
+class Article(models.Model):
+    section = models.ForeignKey(Section, related_name="articles")
+    edition = models.ForeignKey(Edition, related_name="articles")
 
     title = models.CharField(max_length=255)
     publish_date = models.DateTimeField()
-    article_id = models.CharField(unique=True, max_length=255)
+    identifier = models.CharField(unique=True, max_length=255)
     byline = models.CharField(null=True, blank=True, max_length=255)
     summary = models.TextField(null=True, blank=True)
     kicker = models.CharField(null=True, blank=True, max_length=255)
     content = models.TextField()
+
+    class Meta:
+        ordering = ["-publish_date"]
+        unique_together = ("edition", "identifier")
+
+    def get_absolute_url(self):
+        return reverse("pubfeeds.core.views.article", args=(self.edition.feed.slug, self.edition.id, self.section.slug, self.id))
