@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.timezone import utc
 
 import feedparser
+import calendar
 
 from time import mktime
 from datetime import datetime
@@ -17,6 +18,15 @@ class Feed(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class PublishingSchedule(models.Model):
+
+    DAYS = [tup for tup in enumerate(calendar.day_name)]
+
+    feed = models.ForeignKey(Feed)
+    weekday = models.IntegerField(choices=DAYS)
+    time = models.TimeField()
 
 
 class Section(models.Model):
@@ -71,6 +81,7 @@ class Edition(models.Model):
 
     def __unicode__(self):
         return "%s: %s" % (self.feed.name, self. publish_date)
+
 
 class Article(models.Model):
     section = models.ForeignKey(Section, related_name="articles")
