@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
 <channel>
-    <title>{{ edition.feed.name }}</title>
-    <link>{{ edition.feed.url }}</link>
-    <pubDate>{{ edition.published_date|date:"D, d M Y H:i:s" }}</pubDate>
+    <title>{{ feed.name }}</title>
+    <link>{{ feed.url }}</link>
+    <pubDate>{{ end|date:"D, d M Y H:i:s" }}</pubDate>
     {% for section in sections %}
     <item>
-        <link>/{{ edition.feed.slug}}/{{edition.id}}/{{ section.slug }}.xml</link>
+        <link>/{{ feed.slug}}/{{ section.slug }}.xml</link>
     </item>
     {% endfor %}
 </channel>

@@ -1,12 +1,13 @@
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.utils.timezone import utc
+from django.utils import timezone
+
 
 import feedparser
 import calendar
 
 from time import mktime
-from datetime import datetime
+import datetime
 
 
 class Feed(models.Model):
@@ -19,14 +20,49 @@ class Feed(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_time_period(self, target_date=None):
+        if target_date is None:
+            target_date = timezone.now()
+
+        start = None
+        end = None
+        for schedule in self.schedule.all():
+
+            delta = (target_date.weekday() - schedule.weekday) % 7
+            deltas = (
+                datetime.timedelta(days=delta),
+                datetime.timedelta(days=delta - 7),
+            )
+
+            for delta in deltas:
+                schedule_date = target_date - delta
+                schedule_date = schedule_date.replace(hour=schedule.time.hour, minute=schedule.time.minute, second=0, microsecond=0)
+
+                if schedule_date < target_date:
+                    if start is None or start < schedule_date:
+                        start = schedule_date
+
+                if schedule_date > target_date:
+                    if end is None or end > schedule_date:
+                        end = schedule_date
+        return (start, end)
+
+    def poll(self):
+        start, end = self.get_time_period()
+        edition, created = Edition.objects.get_or_create(feed=self, published_date=end)
+        edition.poll()
+
 
 class PublishingSchedule(models.Model):
 
-    DAYS = [tup for tup in enumerate(calendar.day_name)]
+    DAYS = [day_pair for day_pair in enumerate(calendar.day_name)]
 
-    feed = models.ForeignKey(Feed)
+    feed = models.ForeignKey(Feed, related_name="schedule")
     weekday = models.IntegerField(choices=DAYS)
     time = models.TimeField()
+
+    class Meta:
+        ordering = ["weekday", "time"]
 
 
 class Section(models.Model):
@@ -73,7 +109,7 @@ class Edition(models.Model):
                         article.summary
 
                     article.content = entry.content
-                    article.publish_date = datetime.fromtimestamp(mktime(entry.published_parsed)).replace(tzinfo=utc)
+                    article.publish_date = datetime.datetime.fromtimestamp(mktime(entry.published_parsed)).replace(tzinfo=timezone.utc)
                     article.save()
 
     def get_absolute_url(self):
@@ -84,12 +120,13 @@ class Edition(models.Model):
 
 
 class Article(models.Model):
-    section = models.ForeignKey(Section, related_name="articles")
+
     edition = models.ForeignKey(Edition, related_name="articles")
+    section = models.ForeignKey(Section, related_name="articles")
 
     title = models.CharField(max_length=255)
     publish_date = models.DateTimeField()
-    identifier = models.CharField(unique=True, max_length=255)
+    identifier = models.CharField(max_length=255)
     byline = models.CharField(null=True, blank=True, max_length=255)
     summary = models.TextField(null=True, blank=True)
     kicker = models.CharField(null=True, blank=True, max_length=255)
@@ -97,7 +134,6 @@ class Article(models.Model):
 
     class Meta:
         ordering = ["-publish_date"]
-        unique_together = ("edition", "identifier")
 
     def get_absolute_url(self):
         return reverse("pubfeeds.core.views.article", args=(self.edition.feed.slug, self.edition.id, self.section.slug, self.id))
