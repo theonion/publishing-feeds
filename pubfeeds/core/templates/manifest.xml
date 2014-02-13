@@ -3,7 +3,7 @@
 <channel>
     <title>{{ feed.name }}</title>
     <link>{{ feed.url }}</link>
-    <pubDate>{{ end|date:"D, d M Y H:i:s" }}</pubDate>
+    <pubDate>{{ edition.published_date|date:"D, d M Y H:i:s" }}</pubDate>
     {% for section in sections %}
     <item>
         <link>/{{ feed.slug}}/{{ section.slug }}.xml</link>
