@@ -5,3 +5,7 @@ include
 lib
 
 *.py[co]
+
+# Directories for static files
+public/static/*
+!public/static/README*
