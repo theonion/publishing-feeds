@@ -26,7 +26,7 @@ def edition(request, feed_slug, edition_id):
 
     format = "xml"
 
-    return render(request, "manifest.%s" % format, context)
+    return render(request, "manifest.%s" % format, context, content_type="text/xml")
 
 
 def section(request, feed_slug, edition_id, section_slug):
@@ -42,7 +42,7 @@ def section(request, feed_slug, edition_id, section_slug):
 
     format = "xml"
 
-    return render(request, "section.%s" % format, context)
+    return render(request, "section.%s" % format, context, content_type="text/xml")
 
 
 
@@ -56,4 +56,4 @@ def article(request, feed_slug, edition_id, section_slug, article_id):
         "article": article
     }
 
-    return render(request, "article.%s" % format, context)
+    return render(request, "article.%s" % format, context, content_type="text/xml")
