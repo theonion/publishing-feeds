@@ -1,3 +1,4 @@
+from django import forms
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils import timezone
@@ -72,7 +73,7 @@ class Section(models.Model):
 
     name = models.CharField(max_length=255)
     slug = models.SlugField()
-    url = models.URLField()
+    url = models.URLField(max_length=1024)
 
     feed = models.ForeignKey(Feed, related_name="sections")
 
