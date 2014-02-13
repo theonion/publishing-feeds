@@ -109,7 +109,7 @@ class Edition(models.Model):
                     if entry.summary:
                         article.summary
 
-                    article.content = entry.content
+                    article.content = entry.content.get("value")
                     article.publish_date = datetime.datetime.fromtimestamp(mktime(entry.published_parsed)).replace(tzinfo=timezone.utc)
                     article.save()
 
