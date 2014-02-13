@@ -15,7 +15,7 @@ class Feed(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     slug = models.SlugField(unique=True)
-    url = models.URLField()
+    url = models.URLField(max_length=1024)
 
     def __unicode__(self):
         return self.name
