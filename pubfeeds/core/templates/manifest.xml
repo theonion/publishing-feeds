@@ -6,7 +6,7 @@
     <pubDate>{{ edition.published_date|date:"D, d M Y H:i:s" }}</pubDate>
     {% for section in sections %}
     <item>
-        <link>/{{ feed.slug}}/{{ section.slug }}.xml</link>
+        <link>/{{ feed.slug }}/{{ edition.id }}/{{ section.slug }}.xml</link>
     </item>
     {% endfor %}
 </channel>
