@@ -24,7 +24,8 @@ def edition(request, feed_slug, edition_id):
         "sections": [],
     }
 
-    for section in feed.sections.all():
+    for section_id in feed.get_section_order():
+        section = Section.objects.get(id=section_id)
         if section.articles.filter(edition=edition).exists():
             context["sections"].append(section)
 
