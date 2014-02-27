@@ -42,7 +42,7 @@ def section(request, feed_slug, edition_id, section_slug):
     context = {
         "edition": edition,
         "section": section,
-        "articles": edition.articles.filter(section=section)
+        "articles": edition.articles.filter(section=section).order_by("publish_date")
     }
 
     format = "xml"
