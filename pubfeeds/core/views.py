@@ -16,6 +16,28 @@ def feed_overview(request, feed_slug):
     return render(request, "feed_overview.html", context)
 
 
+def edition_overview(request, feed_slug, edition_id):
+    edition = get_object_or_404(Edition, id=edition_id)
+    feed = get_object_or_404(Feed, slug=feed_slug)
+    context = {
+        "feed": feed,
+        "edition": edition,
+        "sections": [],
+    }
+
+    for section_id in feed.get_section_order():
+        section = Section.objects.get(id=section_id)
+        if section.articles.filter(edition=edition).exists():
+            section_data = {
+                "articles": edition.articles.filter(section=section).order_by("publish_date"),
+                "name": section.name,
+                "url": section.url
+            }
+            context["sections"].append(section_data)
+
+    return render(request, "edition_overview.html", context)
+
+
 def latest(request, feed_slug):
     feed = get_object_or_404(Feed, slug=feed_slug)
     try:
@@ -58,7 +80,6 @@ def section(request, feed_slug, edition_id, section_slug):
     format = "xml"
 
     return render(request, "section.%s" % format, context, content_type="text/xml")
-
 
 
 def article(request, feed_slug, edition_id, section_slug, article_id):

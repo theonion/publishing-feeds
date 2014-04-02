@@ -18,15 +18,33 @@
   </head>
   <body>
     <div class="container">
-        <h3>{{ feed.name }}</h3>
-        <div class="list-group">
-          {% for edition in feed.editions.all|slice:":25" %}
-          <a href="/{{ feed.slug }}/{{ edition.pk }}/overview" class="list-group-item">
-            <span class="badge">{{ edition.articles.count }}</span>
-            <b>#{{ edition.pk }}</b> ({{ edition.published_date|date:"SHORT_DATETIME_FORMAT" }})
-          </a>
-          {% endfor %}
+        <h3>{{ feed.name }} #{{ edition.pk }} ({{ edition.published_date|date:"SHORT_DATETIME_FORMAT" }})</h3>
+
+        {% for section in sections %}
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">{{ section.name }} <span class="badge">{{ section.articles|length }}</span></div>
+            <!-- Table -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Publish Date</th>
+                        <th>Byline</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for article in section.articles %}
+                    <tr>
+                        <td>{{ article.title }}</td>
+                        <td>{{ article.publish_date|date:"SHORT_DATETIME_FORMAT" }}</td>
+                        <td>{{ article.byline }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
+        {% endfor %}
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
