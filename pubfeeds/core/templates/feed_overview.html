@@ -19,24 +19,14 @@
   <body>
     <div class="container">
         <h3>{{ feed.name }}</h3>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Edition #</th>
-                    <th>Publication date</th>
-                    <th>Article count</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for edition in feed.editions.all|slice:":10" %}
-                <tr>
-                    <td>{{ edition.pk }}</td>
-                    <td>{{ edition.published_date|date:"SHORT_DATETIME_FORMAT" }}</td>
-                    <td>{{ edition.articles.count }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="list-group">
+          {% for edition in feed.editions.all|slice:":25" %}
+          <a href="/{{ feed.slug }}/{{ edition.pk }}/overview" class="list-group-item">
+            <span class="badge">{{ edition.articles.count }}</span>
+            <b>#{{ edition.pk }}</b> ({{ edition.published_date|date:"SHORT_DATETIME_FORMAT" }})
+          </a>
+          {% endfor %}
+        </div>
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
