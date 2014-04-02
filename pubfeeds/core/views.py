@@ -18,7 +18,7 @@ def feed_overview(request, feed_slug):
 
 def edition_overview(request, feed_slug, edition_id):
     edition = get_object_or_404(Edition, id=edition_id)
-    feed = get_object_or_404(Feed, slug=feed_slug)
+    feed = Feed.objects.get(slug=feed_slug)
     context = {
         "feed": feed,
         "edition": edition,
