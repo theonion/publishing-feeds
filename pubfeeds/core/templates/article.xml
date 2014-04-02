@@ -13,11 +13,11 @@
         <body.head>
             <hedline>
                 <hl1>{{ article.title|safe }}</hl1>
-                <hl2 class="subhead">{{ article.summary|safe }}</hl2>
+                <hl2 class="subhead">{% if article.summary %}{{ article.summary|safe }}{% endif %}</hl2>
             </hedline>
             <byline>{{ byline }}</byline>
             <abstract>
-                <p>{{ article.summary|safe }}</p>
+                {% if article.summary %}<p>{{ article.summary|safe }}</p>{% endif %}
             </abstract>
         </body.head>
         <body.content>
