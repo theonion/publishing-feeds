@@ -31,7 +31,7 @@
                 {% for edition in feed.editions.all|slice:":10" %}
                 <tr>
                     <td>{{ edition.pk }}</td>
-                    <td>{{ edition.end|date:"SHORT_DATETIME_FORMAT" }}</td>
+                    <td>{{ edition.published_date|date:"SHORT_DATETIME_FORMAT" }}</td>
                     <td>{{ edition.articles.count }}</td>
                 </tr>
                 {% endfor %}
