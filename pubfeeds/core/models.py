@@ -101,7 +101,7 @@ class Edition(models.Model):
                         article = Article(identifier=entry.link, section=section, edition=self)
                     
                     if article.section != section:
-                        continue # If this article has been already created in another section, skip that shit.
+                        continue  # If this article has been already created in another section, skip that shit.
 
                     if hasattr(entry, 'author'):
                         article.byline = entry.author
@@ -117,7 +117,7 @@ class Edition(models.Model):
         return reverse("pubfeeds.core.views.edition", args=(self.feed.slug, self.id))
 
     def __unicode__(self):
-        return "%s: %s" % (self.feed.name, self. publish_date)
+        return "%s: %s" % (self.feed.name, self.published_date)
 
 
 class Article(models.Model):
