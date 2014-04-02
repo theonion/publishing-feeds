@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+{% load core %}<?xml version="1.0" encoding="UTF-8"?>
 <nitf version="-//IPTC//DTD NITF 3.3//EN" xmlns:extra="urn:extra-functions">
     <head>
         <title>{{ article.title }}</title>
@@ -12,16 +12,16 @@
     <body>
         <body.head>
             <hedline>
-                <hl1>{{ article.title|safe }}</hl1>
-                <hl2 class="subhead">{% if article.summary %}{{ article.summary|safe }}{% endif %}</hl2>
+                <hl1>{{ article.title|escampeamps }}</hl1>
+                <hl2 class="subhead">{% if article.summary %}{{ article.summary|escampeamps }}{% endif %}</hl2>
             </hedline>
             <byline>{{ byline }}</byline>
             <abstract>
-                {% if article.summary %}<p>{{ article.summary|safe }}</p>{% endif %}
+                {% if article.summary %}<p>{{ article.summary|escampeamps }}</p>{% endif %}
             </abstract>
         </body.head>
         <body.content>
-            {{ article.content|safe }}
+            {{ article.content|escampeamps }}
         </body.content>
         <body.end />
     </body>
