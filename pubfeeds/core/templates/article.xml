@@ -21,7 +21,7 @@
             </abstract>
         </body.head>
         <body.content>
-            {{ article.content|escapeamps }}
+            {{ article.content|safe }}
         </body.content>
         <body.end />
     </body>
