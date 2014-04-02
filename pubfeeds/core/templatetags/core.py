@@ -1,7 +1,7 @@
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 from django.template.base import Library
-from django.templates.defaultfilters import stringfilter
+from django.template.defaultfilters import stringfilter
 
 
 register = Library()
