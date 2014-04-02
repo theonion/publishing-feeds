@@ -103,6 +103,8 @@ class Edition(models.Model):
                     if article.section != section:
                         continue  # If this article has been already created in another section, skip that shit.
 
+                    article.title = entry.title
+
                     if hasattr(entry, 'author'):
                         article.byline = entry.author
 

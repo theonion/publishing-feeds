@@ -8,7 +8,7 @@ from .models import Feed, Edition, Section, Article
 
 def feed_overview(request, feed_slug):
 
-    feed = Feed.objects.get(slug=feed_slug)
+    feed = get_object_or_404(Feed, slug=feed_slug)
     context = {
         "feed": feed
     }
@@ -17,8 +17,8 @@ def feed_overview(request, feed_slug):
 
 
 def edition_overview(request, feed_slug, edition_id):
-    edition = Edition.objects.get(id=edition_id)
-    feed = Feed.objects.get(slug=feed_slug)
+    edition = get_object_or_404(Edition, id=edition_id)
+    feed = get_object_or_404(Feed, slug=feed_slug)
     context = {
         "feed": feed,
         "edition": edition,
