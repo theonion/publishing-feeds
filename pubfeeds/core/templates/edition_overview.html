@@ -36,7 +36,7 @@
                 <tbody>
                     {% for article in section.articles %}
                     <tr>
-                        <td>{{ article.title }}</td>
+                        <td><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></td>
                         <td>{{ article.publish_date|date:"SHORT_DATETIME_FORMAT" }}</td>
                         <td>{{ article.byline }}</td>
                     </tr>
