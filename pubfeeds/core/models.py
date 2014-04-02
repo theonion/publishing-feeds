@@ -51,7 +51,7 @@ class Feed(models.Model):
     def poll(self):
         start, end = self.get_time_period()
         edition, created = Edition.objects.get_or_create(feed=self, published_date=end)
-        edition.poll()
+        edition.poll(start, end)
 
 
 class PublishingSchedule(models.Model):
@@ -90,11 +90,15 @@ class Edition(models.Model):
     class Meta:
         ordering = ["-published_date"]
 
-    def poll(self):
+    def poll(self, start, end):
         for section in self.feed.sections.all():
             data = feedparser.parse(section.url)
             for entry in data.entries:
                 if entry.link:
+                    publish_date = datetime.datetime.fromtimestamp(mktime(entry.published_parsed)).replace(tzinfo=timezone.utc)
+                    if publish_date < start or publish_date > end:
+                        continue
+
                     try:
                         article = Article.objects.get(identifier=entry.link, edition=self)
                     except Article.DoesNotExist:
@@ -112,7 +116,8 @@ class Edition(models.Model):
                         article.summary
 
                     article.content = entry.content[0].get("value")
-                    article.publish_date = datetime.datetime.fromtimestamp(mktime(entry.published_parsed)).replace(tzinfo=timezone.utc)
+                    article.publish_date = publish_date
+
                     article.save()
 
     def get_absolute_url(self):
