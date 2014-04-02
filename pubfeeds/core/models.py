@@ -136,7 +136,7 @@ class Article(models.Model):
     content = models.TextField()
 
     class Meta:
-        ordering = ["publish_date"]
+        ordering = ["-publish_date"]
 
     def get_absolute_url(self):
         return reverse("pubfeeds.core.views.article", args=(self.edition.feed.slug, self.edition.id, self.section.slug, self.id))
