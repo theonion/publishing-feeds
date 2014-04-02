@@ -12,16 +12,16 @@
     <body>
         <body.head>
             <hedline>
-                <hl1>{{ article.title|escampeamps }}</hl1>
-                <hl2 class="subhead">{% if article.summary %}{{ article.summary|escampeamps }}{% endif %}</hl2>
+                <hl1>{{ article.title|escapeamps }}</hl1>
+                <hl2 class="subhead">{% if article.summary %}{{ article.summary|escapeamps }}{% endif %}</hl2>
             </hedline>
             <byline>{{ byline }}</byline>
             <abstract>
-                {% if article.summary %}<p>{{ article.summary|escampeamps }}</p>{% endif %}
+                {% if article.summary %}<p>{{ article.summary|escapeamps }}</p>{% endif %}
             </abstract>
         </body.head>
         <body.content>
-            {{ article.content|escampeamps }}
+            {{ article.content|escapeamps }}
         </body.content>
         <body.end />
     </body>
