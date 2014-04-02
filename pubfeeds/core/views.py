@@ -6,6 +6,16 @@ from django.shortcuts import get_object_or_404, render
 from .models import Feed, Edition, Section, Article
 
 
+def feed_overview(request, feed_slug):
+
+    feed = get_object_or_404(Feed, slug=feed_slug)
+    context = {
+        "feed": feed
+    }
+
+    return render(request, "feed_overview.html", context)
+
+
 def latest(request, feed_slug):
     feed = get_object_or_404(Feed, slug=feed_slug)
     try:
