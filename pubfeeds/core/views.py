@@ -29,7 +29,7 @@ def edition_overview(request, feed_slug, edition_id):
         section = Section.objects.get(id=section_id)
         if section.articles.filter(edition=edition).exists():
             section_data = {
-                "articles": edition.articles.filter(section=section).order_by("publish_date"),
+                "articles": edition.articles.filter(section=section).order_by("-publish_date"),
                 "name": section.name,
                 "url": section.url
             }
@@ -74,7 +74,7 @@ def section(request, feed_slug, edition_id, section_slug):
     context = {
         "edition": edition,
         "section": section,
-        "articles": edition.articles.filter(section=section).order_by("publish_date")
+        "articles": edition.articles.filter(section=section).order_by("-publish_date")
     }
 
     format = "xml"
