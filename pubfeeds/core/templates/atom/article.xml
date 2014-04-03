@@ -1,0 +1,19 @@
+{% load core %}<?xml version="1.0" encoding="UTF-8" ?>
+<atom:feed xmlns:atom="http://www.w3.org/2005/Atom">
+    <atom:id>{{ article.id }}.xml</atom:id>
+    <atom:title type="html">{{ article.title|striptags }}</atom:title>
+    <atom:updated>{{ article.publish_date|date:"c" }}</atom:updated>
+    <atom:logo></atom:logo>
+    <atom:entry>
+        <atom:id>{{ article.id }}</atom:id>
+        <atom:title type="html">{{ article.title|striptags }}</atom:title>
+        <atom:updated>{{ article.publish_date|date:"c" }}</atom:updated>
+        <atom:published>{{ article.publish_date|date:"c" }}</atom:published>
+        {% if article.byline %}<atom:author>
+          <atom:name>{{ article.byline }}</atom:name>
+        </atom:author>{% endif %}
+        <atom:content type="html">
+          {{ article.content|safe }}
+        </atom:content>
+    </atom:entry>
+</atom:feed>

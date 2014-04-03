@@ -61,9 +61,9 @@ def edition(request, feed_slug, edition_id):
         if section.articles.filter(edition=edition).exists():
             context["sections"].append(section)
 
-    format = "xml"
+    format = request.GET.get("format", "nitf")
 
-    return render(request, "manifest.%s" % format, context, content_type="text/xml")
+    return render(request, "{}/manifest.xml".format(format), context, content_type="text/xml")
 
 
 def section(request, feed_slug, edition_id, section_slug):
@@ -77,9 +77,9 @@ def section(request, feed_slug, edition_id, section_slug):
         "articles": edition.articles.filter(section=section).order_by("-publish_date")
     }
 
-    format = "xml"
+    format = request.GET.get("format", "nitf")
 
-    return render(request, "section.%s" % format, context, content_type="text/xml")
+    return render(request, "{}/section.xml".format(format), context, content_type="text/xml")
 
 
 def article(request, feed_slug, edition_id, section_slug, article_id):
@@ -92,4 +92,6 @@ def article(request, feed_slug, edition_id, section_slug, article_id):
         "article": article
     }
 
-    return render(request, "article.%s" % format, context, content_type="text/xml")
+    format = request.GET.get("format", "nitf")
+
+    return render(request, "{}/article.xml".format(format), context, content_type="text/xml")
