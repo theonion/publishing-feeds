@@ -1,7 +1,7 @@
 <atom:feed xmlns:atom="http://www.w3c.org/2005/Atom">
     <atom:id></atom:id>
     <atom:title>The Onion Issue {{ edition.published_date|date:"Ymd" }}</atom:title>
-    <atom:link href="http://pubfeeds.theonion.com{{{ edition.get_absolute_url }}?format=atom" rel="sekf" />
+    <atom:link href="http://pubfeeds.theonion.com{{ edition.get_absolute_url }}?format=atom" rel="sekf" />
     <atom:icon></atom:icon>
     <atom:logo></atom:logo>
     {% for section in sections %}
