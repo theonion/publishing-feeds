@@ -8,7 +8,7 @@
     <atom:logo></atom:logo>
     {% for article in articles %}
     <atom:entry>
-        <atom:id>article_{{ article.article_id }}.xml</atom:id>
+        <atom:id>article_{{ article.id }}.xml</atom:id>
         <atom:updated>{{ article.publish_date|date:"c" }}</atom:updated>
         <atom:published>{{ article.publish_date|date:"c" }}</atom:published>
         <atom:link href="http://pubfeeds.theonion.com{{ article.get_absolute_url }}?format=atom" rel="alternate" />
