@@ -19,6 +19,31 @@ FEEDS = (
 
 
 class FeedTestCase(TestCase):
+
+    def test_onion(self):
+        feed = Feed.objects.create(
+            name="The Onion",
+            slug="onion",
+            url="http://www.theonion.com"
+        )
+        # I'm gonna make a feed that publishes on thursday morning (at midnight)
+        PublishingSchedule.objects.create(
+            feed=feed,
+            weekday=3,
+            time=datetime.time(hour=0, minute=0)
+        )
+
+        # This is today, a Wednesday
+        target_date = datetime.datetime(year=2014, month=4, day=16, hour=21, minute=17)
+        start, end = feed.get_time_period(target_date=target_date)
+       
+        # This should be Thursday, the 10th
+        self.assertEqual(start.day, 10)
+        self.assertEqual(start.month, 4)
+        self.assertEqual(start.year, 2014)
+        self.assertEqual(start.hour, 0)
+        self.assertEqual(start.minute, 0)
+
     def test_schedule(self):
         feed = Feed.objects.create(
             name="The A.V. Club",

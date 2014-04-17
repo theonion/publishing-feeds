@@ -23,7 +23,7 @@ class Feed(models.Model):
 
     def get_time_period(self, target_date=None):
         if target_date is None:
-            target_date = timezone.now()
+            target_date = timezone.localtime(timezone.now())
 
         start = None
         end = None
