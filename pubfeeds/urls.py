@@ -11,6 +11,6 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^onion/4/manifest\.xml', RedirectView.as_view(url="/onion/5/manifest.xml")),
+    url(r'^onion/4/manifest\.xml', RedirectView.as_view(url="/onion/8/manifest.xml")),
     url(r'', include('pubfeeds.core.urls'))
 )
