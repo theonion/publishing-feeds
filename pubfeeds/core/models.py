@@ -110,7 +110,7 @@ class Edition(models.Model):
                     article.title = entry.title[:255]
 
                     if getattr(entry, 'author', None):
-                        article.byline = entry.author
+                        article.byline = entry.author[:255]
 
                     if entry.summary:
                         article.summary
