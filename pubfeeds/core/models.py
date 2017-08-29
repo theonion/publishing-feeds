@@ -103,7 +103,7 @@ class Edition(models.Model):
                         article = Article.objects.get(identifier=entry.link, edition=self)
                     except Article.DoesNotExist:
                         article = Article(identifier=entry.link, section=section, edition=self)
-                    
+
                     if article.section != section:
                         continue  # If this article has been already created in another section, skip that shit.
 
@@ -115,7 +115,15 @@ class Edition(models.Model):
                     if entry.summary:
                         article.summary
 
-                    article.content = entry.content[0].get("value")
+                    if getattr(entry, 'content', None):
+                        # Bulbs RSS feeds use 'content' field
+                        article.content = entry.content[0].get("value")
+                    elif getattr(entry, 'description', None):
+                        # Kinja RSS feeds use 'description' field
+                        article.content = entry.description
+                    else:
+                        raise Exception('Could not determine item content')
+
                     article.publish_date = publish_date
 
                     article.save()
