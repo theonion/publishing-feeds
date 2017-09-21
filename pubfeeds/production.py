@@ -15,4 +15,4 @@ DATABASES = {
     }
 }
 
-STATIC_URL = 'http://assets3.onionstatic.com/onionstatic/pubfeeds/'
+STATIC_URL = 'http://assets2.onionstatic.com/pubfeeds/'
