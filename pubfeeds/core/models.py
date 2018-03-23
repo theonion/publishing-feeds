@@ -99,6 +99,19 @@ class Edition(models.Model):
                     if publish_date < start or publish_date > end:
                         continue
 
+                    if hasattr(entry, 'content'):
+                        # Bulbs RSS feeds use 'content' field
+                        content = entry.content[0].get("value")
+                    elif hasattr(entry, 'description'):
+                        # Kinja RSS feeds use 'description' field
+                        content = entry.description
+                    else:
+                        raise Exception('Could not determine item content')
+
+                    if not content:
+                        # Skip empty content (probably a video)
+                        continue
+
                     try:
                         article = Article.objects.get(identifier=entry.link, edition=self)
                     except Article.DoesNotExist:
@@ -115,16 +128,8 @@ class Edition(models.Model):
                     if entry.summary:
                         article.summary
 
-                    if getattr(entry, 'content', None):
-                        # Bulbs RSS feeds use 'content' field
-                        article.content = entry.content[0].get("value")
-                    elif getattr(entry, 'description', None):
-                        # Kinja RSS feeds use 'description' field
-                        article.content = entry.description
-                    else:
-                        raise Exception('Could not determine item content')
-
                     article.publish_date = publish_date
+                    article.content = content
 
                     article.save()
 
